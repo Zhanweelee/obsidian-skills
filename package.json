@@ -1,0 +1,37 @@
+{
+  "name": "obsidian-skills",
+  "version": "1.0.0",
+  "description": "Agent skills for Obsidian LLM Wiki: raw archive + wiki synthesis, and automated wiki reorganization. Works with Cursor, Claude Code, and other SKILL.md-compatible agents.",
+  "type": "module",
+  "bin": {
+    "obsidian-skills": "./bin/obsidian-skills.mjs"
+  },
+  "files": [
+    "skills",
+    "bin",
+    "README.md",
+    "LICENSE",
+    "docs"
+  ],
+  "keywords": [
+    "cursor",
+    "obsidian",
+    "agent-skills",
+    "skill",
+    "agentskills",
+    "llm",
+    "wiki"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Zhanweelee/obsidian-skills.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Zhanweelee/obsidian-skills/issues"
+  },
+  "homepage": "https://github.com/Zhanweelee/obsidian-skills#readme",
+  "engines": {
+    "node": ">=18"
+  }
+}
