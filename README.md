@@ -1,79 +1,80 @@
 # obsidian-skills
 
-面向 **Cursor / Claude Code / Codex** 等支持 [Agent Skills](https://agentskills.io)（`SKILL.md`）的客户端：用 LLM 维护 **Obsidian** 的 **raw 存档层** 与 **wiki 合成层**，并支持对现有库做**自动整理**。
+Agent [Skills](https://agentskills.io) (`SKILL.md`) for **Cursor**, **Claude Code**, **Codex**, and other compatible clients: maintain an Obsidian vault with a **raw** archive layer and a **wiki** synthesis layer (LLM Wiki pattern), plus optional **wiki maintenance** without new input.
 
-## 包含的技能
+## Skills in this repo
 
-| 目录 | 说明 |
-|------|------|
-| [`skills/obsidian-knowledge-capture`](skills/obsidian-knowledge-capture/) | 新来源 → 先写入 `raw/` 存档，再写入 `wiki/` 并维护 `index.md` / `log.md` |
-| [`skills/obsidian-wiki-reorganize`](skills/obsidian-wiki-reorganize/) | 无新输入，扫描现有 `raw/`、`wiki/`，lint、重建索引、补链 |
+| Skill | Summary |
+|--------|---------|
+| [`obsidian-knowledge-capture`](skills/obsidian-knowledge-capture/) | Ingest sources → write immutable notes under `raw/`, then synthesize into `wiki/` with `index.md` and `log.md`. |
+| [`obsidian-wiki-reorganize`](skills/obsidian-wiki-reorganize/) | No new input: scan existing `raw/` and `wiki/`, lint links, reconcile `index.md` / `log.md`, fix orphans safely. |
+| [`obsidian-cli`](skills/obsidian-cli/) | Guide for the official Obsidian desktop CLI (vault targeting, daily notes, search, files, plugins, sync, dev commands). |
 
-每个技能为独立文件夹，内含 `SKILL.md`（及可选 `reference.md`），符合 Anthropic/Cursor 的命名与 frontmatter 规范。
+Each skill is a folder with `SKILL.md` (and optional `reference.md`). Names match the `name` field in frontmatter.
 
-## 本地开发：用软链指向本仓库（推荐）
+## Installation (Skills CLI)
 
-克隆到固定路径后，把 Cursor 用户技能目录**软链**到本仓库里的 `skills/` 子目录，之后只改仓库即可生效。
+Use the [Skills CLI](https://skills.sh/) (`npx skills`) to install one skill at a time from this repository:
 
 ```bash
-git clone git@github.com:Zhanweelee/obsidian-skills.git ~/gitlab/obsidian-skills
-cd ~/gitlab/obsidian-skills
-node bin/obsidian-skills.mjs link
-# 或：npm i && npx obsidian-skills link
+npx skills add https://github.com/Zhanweelee/obsidian-skills --skill obsidian-knowledge-capture
+npx skills add https://github.com/Zhanweelee/obsidian-skills --skill obsidian-wiki-reorganize
+npx skills add https://github.com/Zhanweelee/obsidian-skills --skill obsidian-cli
 ```
 
-默认在 `~/.cursor/skills/` 下创建：
+Equivalent shorthand (GitHub `owner/repo`):
 
-- `obsidian-knowledge-capture` → `…/obsidian-skills/skills/obsidian-knowledge-capture`
-- `obsidian-wiki-reorganize` → `…/obsidian-skills/skills/obsidian-wiki-reorganize`
+```bash
+npx skills add Zhanweelee/obsidian-skills --skill obsidian-knowledge-capture
+```
 
-若目标路径已存在**同名真实目录**（非本仓库链出的 symlink），请先自行备份或移走，再执行 `link`。
+Install globally and skip prompts (typical for automation):
 
-移除软链（仅删除指向本包的那两个 symlink）：
+```bash
+npx skills add https://github.com/Zhanweelee/obsidian-skills --skill obsidian-wiki-reorganize -g -y
+```
+
+Browse and search more skills at [skills.sh](https://skills.sh/).
+
+**Other useful commands:** `npx skills find <query>`, `npx skills check`, `npx skills update`.
+
+## Symlink install (local development)
+
+To edit skills in a git clone and have Cursor pick them up via symlinks (no copy):
+
+```bash
+git clone https://github.com/Zhanweelee/obsidian-skills.git
+cd obsidian-skills
+node bin/obsidian-skills.mjs link
+```
+
+This creates symlinks under `~/.cursor/skills/` pointing at `skills/<name>` in the repo. If a real directory already exists with the same name, move it aside first.
+
+Remove only symlinks created from this package:
 
 ```bash
 node bin/obsidian-skills.mjs unlink
 ```
 
-## 从 npm 安装（发布到 npm 之后）
+## npm package (`obsidian-skills` CLI)
 
-本仓库提供 CLI `obsidian-skills`，用于在用户机器上创建上述软链（不复制文件，保证与包内 `skills/` 一致）。
+After [publishing to npm](docs/PUBLISHING.md), users can link the packaged `skills/` tree:
 
 ```bash
 npx obsidian-skills@latest link
 ```
 
-若全局安装：
+## Registry hubs
 
-```bash
-npm i -g obsidian-skills
-obsidian-skills link
-```
+- [skills.sh](https://skills.sh/) — directory and `npx skills` flows (same install pattern as [vercel-labs/skills/find-skills](https://skills.sh/vercel-labs/skills/find-skills)).
+- [agentskill.sh](https://agentskill.sh/) — `/learn` and skillsets; import a public GitHub repo that contains `skills/*/SKILL.md` (same layout as [anthropics/skills](https://github.com/anthropics/skills)).
 
-> **说明**：生态里常见的是 `npx skills add owner/repo`（从 GitHub 拉取）或各平台的 `/learn`；本包名 **`obsidian-skills`**，避免与通用 `skill` CLI 混淆。发布后请用 **`npx obsidian-skills link`** 完成 Cursor 侧软链。
+See [docs/PUBLISHING.md](docs/PUBLISHING.md) for npm versioning and repository metadata.
 
-## 发布到 agentskill.sh / 可被发现
+## Repository
 
-- 将本仓库推送到 **GitHub 或 GitLab（公开）**。
-- 在 [agentskill.sh](https://agentskill.sh) 按站点流程**导入仓库**或发布技能集；多数工具会识别仓库根下或 `skills/` 下的多个 `SKILL.md`（与 [anthropics/skills](https://github.com/anthropics/skills) 布局一致）。
-- Cursor 用户也可使用官方 **`/learn`** 或站点提供的安装方式（以 agentskill.sh 当前文档为准）。
+**https://github.com/Zhanweelee/obsidian-skills**
 
-更细的版本号、`package.json` 的 `repository` 字段与 npm 发布步骤见 [docs/PUBLISHING.md](docs/PUBLISHING.md)。
+## License
 
-## Git 远程
-
-公开仓库：<https://github.com/Zhanweelee/obsidian-skills>
-
-若你尚未在本机推送过，请先在 GitHub **新建同名空仓库**（不要勾选添加 README），再在本地执行：
-
-```bash
-cd ~/gitlab/obsidian-skills
-git remote add origin git@github.com:Zhanweelee/obsidian-skills.git   # 若已添加可跳过
-git push -u origin main
-```
-
-若提示 `Repository not found`，请确认仓库已在 `Zhanweelee` 账号下创建，且本机 `ssh -T git@github.com` 登录的是有权限的账号。
-
-## 许可
-
-MIT，见 [LICENSE](LICENSE)。
+MIT — see [LICENSE](LICENSE).

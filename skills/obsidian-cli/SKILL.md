@@ -1,86 +1,86 @@
 ---
 name: obsidian-cli
 description: >-
-  Official Obsidian desktop CLI (1.12+): vault targeting, parameters/flags,
+  Official Obsidian desktop CLI (1.12+): vault targeting, parameters and flags,
   daily notes, search, files, tasks, plugins, sync, publish, and developer
   commands. Use when the user runs or scripts `obsidian`, automates Obsidian
-  from the terminal, or mentions Obsidian 命令行、CLI、obsidian help.
+  from the terminal, or asks about Obsidian CLI, command line, or `obsidian help`.
 ---
 
 # Obsidian CLI
 
-## 何时启用
+## When to use
 
-- 用户在终端使用或询问 **`obsidian`** 命令
-- 需要从脚本/cron/AI 工具**程序化操作** Obsidian 库
-- 涉及 **日记、搜索、读写笔记、任务、插件、同步、发布、开发者调试**
+- The user runs or asks about the **`obsidian`** terminal command.
+- They script or automate Obsidian (cron, agents, CI-style local tasks).
+- Topics: **daily notes, search, read/write notes, tasks, plugins, sync, publish, developer tooling**.
 
-## 前置条件
+## Prerequisites
 
-1. **安装版 Obsidian 1.12+**（需满足官方对「安装器版本」的要求）。
-2. **设置 → 通用 → 启用 Command line interface**，并按提示注册 CLI（加入 `PATH`）。
-3. **桌面端 Obsidian 在运行**时 CLI 最可靠；未运行时首次调用可能会启动应用。
-4. 无桌面端纯 CLI 同步需求见官方 **Obsidian Headless** 文档，与桌面 CLI 场景不同。
+1. **Obsidian installer build 1.12+** (meet official installer requirements).
+2. **Settings → General → Enable Command line interface**, then register the CLI on `PATH`.
+3. **Obsidian desktop running** — most reliable; first invocation may launch the app if it was closed.
+4. Headless/server workflows differ; point users to **Obsidian Headless** docs when they need non-desktop automation.
 
-权威文档：<https://help.obsidian.md/cli>
+Authoritative docs: <https://help.obsidian.md/cli>
 
-## 两种用法
+## Two modes
 
-| 方式 | 说明 |
-|------|------|
-| **单条命令** | `obsidian <子命令> [参数=值] [开关]` |
-| **TUI** | 只输入 `obsidian`，进入交互界面；之后可直接输入子命令（可不带 `obsidian` 前缀），支持补全与历史（如 `Ctrl+R`） |
+| Mode | Description |
+|------|-------------|
+| **Single-shot** | `obsidian <subcommand> [param=value] [flags]` |
+| **TUI** | Run `obsidian` alone for an interactive shell; subcommands can omit the `obsidian` prefix; completion and history (e.g. `Ctrl+R`) |
 
-入门：
+Getting started:
 
 ```bash
 obsidian help
 obsidian version
 ```
 
-## 参数与约定
+## Parameters and conventions
 
-- **参数**：`name=value`；值含空格时用引号：`content="Hello world"`。
-- **开关（flag）**：无值，写上即生效，例如 `open`、`overwrite`、`todo`。
-- **多行文本**：在 `content=` 等中使用 `\n` 换行、`\t` 制表符。
-- **复制输出到剪贴板**：任意命令末尾加 `--copy`。
-- **指定库 `vault=`**：须作为**第一个**参数：`obsidian vault=我的库 daily`  
-  若当前 shell 的工作目录已是某个 vault 根目录，默认使用该库；否则通常用当前在 Obsidian 中**活动**的库。
-- **定位文件**：
-  - `file=`：按库内**双链解析**（笔记名即可，不必全路径）。
-  - `path=`：从 vault 根起的**精确路径**，如 `Templates/Recipe.md`。
-- 未指定 `file`/`path` 时，许多命令默认针对**当前活动笔记**。
+- **Parameters**: `name=value`; quote values with spaces: `content="Hello world"`.
+- **Flags**: boolean switches (e.g. `open`, `overwrite`, `todo`) — present means true.
+- **Multiline text**: use `\n` and `\t` inside values like `content=`.
+- **Copy output to clipboard**: append `--copy` to any command.
+- **`vault=`** must be the **first** argument when used: `obsidian vault=MyVault daily`  
+  If the shell `cwd` is already a vault root, that vault is used; otherwise the **active** vault in the app is the default.
+- **Targeting notes**:
+  - `file=` — resolve by **wikilink name** inside the vault (not necessarily full path).
+  - `path=` — path from vault root, e.g. `Templates/Recipe.md`.
+- Many commands default to the **active note** when `file`/`path` are omitted.
 
-## 常用场景与命令
+## Common flows
 
-**日记**
+**Daily notes**
 
 ```bash
 obsidian daily
-obsidian daily:append content="- [ ] 待办事项"
+obsidian daily:append content="- [ ] Todo item"
 obsidian daily:read
 obsidian daily:path
 ```
 
-**搜索**
+**Search**
 
 ```bash
-obsidian search query="关键词"
-obsidian search:context query="关键词" limit=10
-obsidian search:open query="初始查询"
+obsidian search query="keyword"
+obsidian search:context query="keyword" limit=10
+obsidian search:open query="initial query"
 ```
 
-**文件**
+**Files**
 
 ```bash
 obsidian read
-obsidian read file=笔记名
-obsidian create name="新笔记" content="# 标题\n\n正文" open
+obsidian read file=NoteTitle
+obsidian create name="New note" content="# Title\n\nBody" open
 obsidian files folder=Inbox ext=md
-obsidian append file=笔记名 content="追加一行"
+obsidian append file=NoteTitle content="Appended line"
 ```
 
-**任务**
+**Tasks**
 
 ```bash
 obsidian tasks todo
@@ -88,14 +88,14 @@ obsidian tasks daily
 obsidian task ref="Note.md:12" toggle
 ```
 
-**命令面板（含插件注册的命令）**
+**Command palette (including plugin-registered commands)**
 
 ```bash
 obsidian commands filter=my-plugin
 obsidian command id=app:open-settings
 ```
 
-**开发者（插件/主题开发）**
+**Developer (plugin/theme work)**
 
 ```bash
 obsidian devtools
@@ -104,12 +104,12 @@ obsidian eval code="app.vault.getFiles().length"
 obsidian dev:screenshot path=shot.png
 ```
 
-## 指令索引
+## Full command index
 
-完整子命令列表、参数表与更多示例见同目录 **[reference.md](reference.md)**。
+See **[reference.md](reference.md)** for grouped subcommands and parameters.
 
-## 执行时注意
+## Execution notes
 
-- 不确定语法时优先 **`obsidian help`** 与官方文档对照。
-- 自动化脚本中明确 **`vault=`** 或 **`cd` 到 vault 根**，避免误操作活动库。
-- 涉及删除、永久删除、发布、同步恢复等命令前，确认 `file`/`path`/`vault` 指向正确。
+- Prefer **`obsidian help`** and the official docs when syntax is unclear.
+- In scripts, set **`vault=`** explicitly or **`cd`** to the vault root to avoid touching the wrong vault.
+- Before destructive operations (delete, permanent delete, publish, sync restore), double-check `file` / `path` / `vault`.

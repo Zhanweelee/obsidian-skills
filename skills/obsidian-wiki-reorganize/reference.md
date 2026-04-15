@@ -1,31 +1,31 @@
-# Obsidian 自动整理 — 补充说明
+# Obsidian wiki maintenance — extra notes
 
-## `log.md` 重组条目示例
+## `log.md` — reorganize entry example
 
 ```markdown
 ## [YYYY-MM-DD] reorganize | auto
 
-- raw 文件数：N
-- wiki 笔记数：M（不含 index / log）
-- index.md：已重建 | 已增量修正
-- 断链：修复 K 处 / 待处理 L 处
-- 孤儿页：已缓解 P 个 / 仍待 Q 个
-- raw 未进 wiki：已建摘要 stub R 个
-- 备注：
+- raw files: N
+- wiki notes: M (excluding index / log)
+- index.md: rebuilt | patched
+- broken links: fixed K / pending L
+- orphans: mitigated P / remaining Q
+- raw without wiki: created R summary stubs
+- notes:
 ```
 
-## 孤儿页判定（实用版）
+## Orphans (practical rule)
 
-- **入链为 0**：全库 `[[该页标题]]` 无匹配（忽略大小写差异时以 Obsidian 实际解析为准）。
-- **例外**：`index.md` 已列出、`README` 类入口链到，可不算孤。
-- **缓解**：从内容推断主题，链到既有 MOC；或只在 `index.md`「待归类」中挂链。
+- **Zero inbound** `[[Page title]]` references (match Obsidian’s resolution rules for case/aliases).
+- **Exceptions**: listed in `index.md`, or linked from a README-style hub — may count as non-orphan.
+- **Mitigation**: infer topic and link from a MOC; or add to “Uncategorized” in `index.md`.
 
-## 断链扫描思路
+## Broken link scan
 
-- 提取所有 `[[...]]` 内标题，与现有 `.md` 的 `title` 或文件名（去扩展名）比对。
-- `[[页|别名]]` 只解析链接目标标题。
+- Extract all `[[...]]` link targets; match against note `title` or basename (without `.md`).
+- For `[[Page|alias]]`, only the link target title matters.
 
-## 重建 `index.md` 时注意
+## Rebuilding `index.md`
 
-- 先完整读取现有 `index.md`，保留非表格、非列表的说明文字。
-- 新表格按分类追加或替换「自动维护」区块（可用 HTML 注释标记 `<!-- auto-index-start -->` … `<!-- auto-index-end -->`，若用户库尚无标记，首次整理可写入该区块便于下次增量）。
+- Read the full existing `index.md` first; keep free-form intro text.
+- Prefer an auto-maintained block delimited by HTML comments, e.g. `<!-- auto-index-start -->` … `<!-- auto-index-end -->`, so the next run can replace only that block.

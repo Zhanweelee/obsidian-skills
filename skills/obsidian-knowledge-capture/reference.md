@@ -1,131 +1,131 @@
-# Obsidian LLM Wiki — 参考模板
+# Obsidian LLM Wiki — reference templates
 
-## `raw/` 存档文件模板
+## `raw/` archive template
 
 ```markdown
 ---
-title: "文章标题或自拟标题"
+title: "Article title or your title"
 date: YYYY-MM-DD
-source: "https://..." 
-# 或 source: "pasted" / "user-provided"
+source: "https://..."
+# or: "pasted" / "user-provided"
 ingested_at: "YYYY-MM-DDTHH:MM:SS"
 excerpt: false
 ---
 
-# 正文（或节选）
+# Body (or excerpt)
 
-（此处为抓取或用户提供的正文，尽量保持完整以便回溯。）
+(Full or cleaned text from fetch or user paste.)
 
 ## Source metadata
 
-- 抓取/录入方式：
-- 公开 URL（若有）：
-- 备注（节选原因、与 URL 差异等）：
+- How captured:
+- Canonical public URL (if any):
+- Notes (why excerpted, mismatch with URL, etc.):
 ```
 
-## `wiki/` 来源摘要页模板（链向 raw）
+## `wiki/` source summary template (links to raw)
 
-使用 **Obsidian 维基链** 链到 raw 笔记标题（推荐与 `raw` 文件 `title` 一致），避免硬编码绝对路径。
+Link to the raw note **by title** (match raw `title`), not by absolute path.
 
 ```markdown
 ---
-title: "摘要 · 文章短标题"
+title: "Summary · Short title"
 date: YYYY-MM-DD
 tags: [wiki/source]
 sources:
-  - "[[RAW 笔记标题]]"
+  - "[[RAW note title]]"
 ---
 
-# 摘要 · xxx
+# Summary · xxx
 
-## 一句话
+## One-liner
 
-## 要点（3–8 条）
+## Key points (3–8 bullets)
 
 -
 
-## 关键术语
+## Key terms
 
-- **术语**：→ [[概念页]]
+- **Term** → [[concept page]]
 
-## 与既有笔记的关联
+## Links to existing notes
 
-- [[相关主题]]
-- 与 [[某旧结论]] 的关系：一致 / 补充 / 冲突（见下）
+- [[Related topic]]
+- Relation to [[older claim]]: agrees / extends / conflicts (see below)
 
-## 冲突与修订（若无则删）
+## Conflicts and updates (remove if empty)
 
-- 旧说法：
-- 新依据（[[RAW 笔记标题]]）：
-- 新结论：
+- Previous claim:
+- New evidence ([[RAW note title]]):
+- Updated conclusion:
 
-## 行动项
+## Action items
 
 - [ ]
 ```
 
-## `wiki/index.md` 增量片段
+## `wiki/index.md` incremental block
 
-在合适分类下追加（保持全文件可读性；大量时可分卷）。
-
-```markdown
-## Sources（来源摘要）
-
-| 页面 | 摘要 |
-|------|------|
-| [[摘要 · 某文]] | 一句话 |
-
-## Concepts（概念）
-
-| 页面 | 说明 |
-|------|------|
-| [[某概念]] | 一句话 |
-```
-
-## `wiki/log.md` 条目模板
+Append under the right section (split volumes if huge).
 
 ```markdown
-## [YYYY-MM-DD] ingest | 文章短标题或 slug
+## Sources
 
-- 类型：url | paste | url+paste
-- raw：`raw/2026-04-15-example-slug.md`
-- wiki：新建 [[摘要 · Example]]、更新 [[某概念]]
-- 备注：
+| Page | Summary |
+|------|---------|
+| [[Summary · Some article]] | One line |
+
+## Concepts
+
+| Page | Summary |
+|------|---------|
+| [[Some concept]] | One line |
 ```
 
-## `wiki/log.md` — Lint 记录
+## `wiki/log.md` — ingest entry
+
+```markdown
+## [YYYY-MM-DD] ingest | short-title-or-slug
+
+- type: url | paste | url+paste
+- raw: `raw/2026-04-15-example-slug.md`
+- wiki: created [[Summary · Example]], updated [[Some concept]]
+- notes:
+```
+
+## `wiki/log.md` — lint entry
 
 ```markdown
 ## [YYYY-MM-DD] lint | optional-scope
 
-- orphans：
-- stale：
-- missing-links：
-- suggested-actions：
+- orphans:
+- stale:
+- missing-links:
+- suggested-actions:
 ```
 
-## 原子概念页（简短）
+## Atomic concept page (short)
 
 ```markdown
 ---
-title: "概念名"
+title: "Concept name"
 date: YYYY-MM-DD
 tags: [wiki/concept]
 ---
 
-# 概念名
+# Concept name
 
-## 定义
+## Definition
 
-## 参见
+## See also
 
-- 来源：[[RAW 或 摘要页]]
+- Source: [[RAW or summary page]]
 
-## 相关
+## Related
 
-- [[其它概念]]
+- [[Other concept]]
 ```
 
-## 可选：附件
+## Optional: attachments
 
-- Vault 设置中将附件目录设为 `raw/assets/` 时，剪藏后图片与 raw 笔记并列，wiki 中说明「见图见 raw 笔记」即可。
+If the vault uses `raw/assets/` for clipper images, note in wiki “see raw note for figures.”

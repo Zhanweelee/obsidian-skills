@@ -1,7 +1,7 @@
 {
   "name": "obsidian-skills",
-  "version": "1.0.0",
-  "description": "Agent skills for Obsidian LLM Wiki: raw archive + wiki synthesis, and automated wiki reorganization. Works with Cursor, Claude Code, and other SKILL.md-compatible agents.",
+  "version": "1.1.0",
+  "description": "Agent skills for Obsidian: LLM Wiki raw/wiki workflow, wiki maintenance, and Obsidian CLI reference. Install with npx skills add. Works with Cursor, Claude Code, and other SKILL.md-compatible agents.",
   "type": "module",
   "bin": {
     "obsidian-skills": "./bin/obsidian-skills.mjs"

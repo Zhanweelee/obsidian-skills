@@ -1,49 +1,45 @@
-# 发布与分发说明
+# Publishing and distribution
 
-## 仓库布局（与生态兼容）
+## Layout (ecosystem-compatible)
 
 ```
 obsidian-skills/
-├── package.json          # npm 包 + bin
+├── package.json
 ├── bin/obsidian-skills.mjs
-├── skills/               # 与 anthropic/anthropics/skills 类似
+├── skills/
 │   ├── obsidian-knowledge-capture/
-│   │   ├── SKILL.md
-│   │   └── reference.md
-│   └── obsidian-wiki-reorganize/
-│       ├── SKILL.md
-│       └── reference.md
+│   ├── obsidian-wiki-reorganize/
+│   └── obsidian-cli/
 ├── README.md
 └── LICENSE
 ```
 
-导入到 **agentskill.sh**、**Agent Skill Hub** 类平台时，选择「多技能仓库」；若平台只认单技能，可分别为每个子目录建子模块仓库（一般不需要）。
+Registries such as [skills.sh](https://skills.sh/) and [agentskill.sh](https://agentskill.sh/) expect one or more `SKILL.md` files under the repo root or under `skills/`, similar to [anthropics/skills](https://github.com/anthropics/skills).
 
 ## npm
 
-1. 修改根目录 `package.json` 中的 `name`（建议 `@你的作用域/obsidian-skills`）、`repository`、`bugs`、`homepage`。
-2. 登录 npm：`npm login`
-3. 发布：`npm publish --access public`（作用域包需 `--access public`）
+1. Set `name` (e.g. `@scope/obsidian-skills`), `repository`, `bugs`, and `homepage` in root `package.json`.
+2. `npm login`
+3. `npm publish --access public` (scoped packages need `--access public`)
 
-发布后用户可用：
+After publish, users can run:
 
 ```bash
 npx obsidian-skills@latest link
 ```
 
-将 `skills/*` 链到 `~/.cursor/skills/`。
+to symlink packaged `skills/*` into `~/.cursor/skills/`.
 
-## GitLab / GitHub
+## Git hosting
 
-- 远程地址以你为准；`package.json` 的 `repository.url` 可与托管商一致。
-- **GitLab 私有库**无法被公共索引抓取时，团队内部可用 **clone + `node bin/obsidian-skills.mjs link`** 分发。
+- Keep `repository.url` in `package.json` aligned with GitHub/GitLab.
+- Private GitLab repos are not indexed by public directories; distribute with **clone + `node bin/obsidian-skills.mjs link`**.
 
-## SKILL.md 规范
+## SKILL.md rules
 
-- `name` 必须与文件夹名一致（小写、连字符）。
-- `description` 含能力与触发场景，便于模型检索。
+- `name` must match the folder name (lowercase, hyphens).
+- `description` should state **what** the skill does and **when** to use it (for model routing).
 
-## 版本
+## Versioning
 
-- 语义化版本写在 `package.json` 的 `version`。
-- 技能正文变更应同步 **升 patch/minor**，便于依赖方锁定 `npx obsidian-skills@1.x`。
+- Bump `version` in `package.json` (semver) when skills or CLI behavior change so consumers can pin `npx obsidian-skills@1.x`.
