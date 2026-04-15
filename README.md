@@ -8,7 +8,6 @@
 |------|------|
 | [`skills/obsidian-knowledge-capture`](skills/obsidian-knowledge-capture/) | 新来源 → 先写入 `raw/` 存档，再写入 `wiki/` 并维护 `index.md` / `log.md` |
 | [`skills/obsidian-wiki-reorganize`](skills/obsidian-wiki-reorganize/) | 无新输入，扫描现有 `raw/`、`wiki/`，lint、重建索引、补链 |
-| [`skills/obsidian-cli`](skills/obsidian-cli/) | Obsidian 官方桌面 CLI（1.12+）：`obsidian` 命令、参数/库定位、常用子命令与开发者指令 |
 
 每个技能为独立文件夹，内含 `SKILL.md`（及可选 `reference.md`），符合 Anthropic/Cursor 的命名与 frontmatter 规范。
 
@@ -17,7 +16,7 @@
 克隆到固定路径后，把 Cursor 用户技能目录**软链**到本仓库里的 `skills/` 子目录，之后只改仓库即可生效。
 
 ```bash
-git clone <你的远程地址> ~/gitlab/obsidian-skills
+git clone git@github.com:Zhanweelee/obsidian-skills.git ~/gitlab/obsidian-skills
 cd ~/gitlab/obsidian-skills
 node bin/obsidian-skills.mjs link
 # 或：npm i && npx obsidian-skills link
@@ -27,11 +26,10 @@ node bin/obsidian-skills.mjs link
 
 - `obsidian-knowledge-capture` → `…/obsidian-skills/skills/obsidian-knowledge-capture`
 - `obsidian-wiki-reorganize` → `…/obsidian-skills/skills/obsidian-wiki-reorganize`
-- `obsidian-cli` → `…/obsidian-skills/skills/obsidian-cli`
 
 若目标路径已存在**同名真实目录**（非本仓库链出的 symlink），请先自行备份或移走，再执行 `link`。
 
-移除软链（仅删除指向本包技能目录的那些 symlink）：
+移除软链（仅删除指向本包的那两个 symlink）：
 
 ```bash
 node bin/obsidian-skills.mjs unlink
@@ -62,20 +60,19 @@ obsidian-skills link
 
 更细的版本号、`package.json` 的 `repository` 字段与 npm 发布步骤见 [docs/PUBLISHING.md](docs/PUBLISHING.md)。
 
-## Git 仓库初始化
+## Git 远程
 
-在本地若尚未创建 Git 历史，可在仓库根执行：
+公开仓库：<https://github.com/Zhanweelee/obsidian-skills>
+
+若你尚未在本机推送过，请先在 GitHub **新建同名空仓库**（不要勾选添加 README），再在本地执行：
 
 ```bash
 cd ~/gitlab/obsidian-skills
-git init -b main
-git add .
-git commit -m "Initial commit: obsidian-skills"
-git remote add origin <你的 GitLab 或 GitHub 地址>
+git remote add origin git@github.com:Zhanweelee/obsidian-skills.git   # 若已添加可跳过
 git push -u origin main
 ```
 
-将根目录 `package.json` 内的 `repository` / `bugs` / `homepage` 改成与你的远程一致后再发布 npm。
+若提示 `Repository not found`，请确认仓库已在 `Zhanweelee` 账号下创建，且本机 `ssh -T git@github.com` 登录的是有权限的账号。
 
 ## 许可
 
