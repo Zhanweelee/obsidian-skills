@@ -3,17 +3,24 @@ name: obsidian-wiki-reorganize
 description: >-
   Scans an existing Obsidian vault’s raw/ and wiki/ trees with no new user
   input: lints links and structure, reconciles index.md and log.md, flags stale
-  or orphan pages, and applies safe reorganizations. Use when the user asks to
-  tidy, lint, health-check, rebuild the index, or reorganize Obsidian raw/wiki
-  with no new source to ingest.
+  or orphan pages, and applies safe reorganizations. Use when the user invokes
+  /obsidian-wiki-reorganize with no extra text, asks to tidy or lint the vault,
+  or reorganize Obsidian raw/wiki with no new source to ingest.
 ---
 
 # Obsidian wiki maintenance (existing raw / wiki only)
 
+## Bare invocation (no extra prompt required)
+
+If the user sends **only** `/obsidian-wiki-reorganize` (slash command) or the equivalent with an empty body — **run the full workflow below** without asking what to check. Default: inventory → lint → safe fixes → update `wiki/index.md` and append `wiki/log.md` as defined in this skill.
+
+Only ask for **vault root** when it is not already known from user rules or context; do **not** require a long prompt describing scope — use the checks and actions in this document.
+
 ## When to use
 
+- **Slash only**: `/obsidian-wiki-reorganize` alone (see **Bare invocation**).
 - The user wants to **reorganize, lint, fix links, rebuild the index, or clear orphans** without providing a new article or URL.
-- Triggers: “clean up my Obsidian wiki”, “lint vault”, “rebuild index”, “raw/wiki housekeeping”.
+- Natural-language triggers: “clean up my Obsidian wiki”, “lint vault”, “rebuild index”, “raw/wiki housekeeping”.
 
 ## Relationship to ingest skill
 
